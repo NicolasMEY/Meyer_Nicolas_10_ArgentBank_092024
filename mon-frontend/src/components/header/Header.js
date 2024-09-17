@@ -1,30 +1,12 @@
-// Le header affiche le nom d'utilisateur s'il est connecté, sinon un lien vers la page de connexion.
-
-// import React from "react";
-// import "./Header.css";
-
-// const Header = () => {
-//   return (
-//     <div className="header">
-//       <h1>
-//         Welcome back
-//         <br />
-//         Tony Jarvis!
-//       </h1>
-//       <button className="edit-button">Edit Name</button>
-//     </div>
-//   );
-// };
-
-// export default Header;
-
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../../redux/slices/auth/authSlice";
+import { selectUser } from "../../redux/slices/profile/profileSlice"; // Assurez-vous que ce sélecteur est correctement défini
 import "./Header.css";
 
 const Header = () => {
-  const { token, isAuthenticated, user } = useSelector((state) => state.auth);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.profile.userInfo); // Utilisez le sélecteur approprié pour obtenir les informations de l'utilisateur
   const dispatch = useDispatch();
 
   return (

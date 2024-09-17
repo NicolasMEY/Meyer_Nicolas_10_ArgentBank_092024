@@ -1,4 +1,4 @@
-// REDUCER et ACTIONS LIEES À L'AUTHENTIFICATION (login/logout) : Ce fichier contient la gestion des actions de connexion, déconnexion et de stockage de l'utilisateur connecté.
+// Ce fichier authSlice.js gère l'état d'authentification dans l'application. Il définit les actions et le reducer pour les processus de connexion (loginStart, loginSuccess, loginFailure) et de déconnexion (logoutUser). Il permet de suivre l'état de connexion de l'utilisateur (authentifié ou non), gérer les erreurs, et stocker le token d'authentification. Il simplifie la gestion des actions liées à l'authentification en combinant actions et reducers en un seul endroit avec Redux Toolkit.
 
 import { createSlice } from "@reduxjs/toolkit";
 // permet de fusionner l'action et le reducer
@@ -51,6 +51,6 @@ export default authSlice.reducer;
 
 // Explications :
 // loginStart : Démarre le processus de connexion, active le chargement.
-// loginSuccess : Récupère et stocke le token d'authentification (par exemple un JWT) et marque l'utilisateur comme authentifié.
+// loginSuccess : Récupère et stock le token d'authentification (par exemple un JWT) et marque l'utilisateur comme authentifié.
 // loginFailure : En cas d'erreur (par exemple, identifiants incorrects), cela stoppe le chargement et enregistre l'erreur.
 // logoutUser : Déconnecte l'utilisateur, supprime le token et réinitialise l'état d'authentification.

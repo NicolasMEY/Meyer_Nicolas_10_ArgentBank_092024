@@ -1,10 +1,10 @@
 import React from "react";
-import "./styles/main.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Header from "./components/header/Header";
+import "./styles/main.css";
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
 import User from "./pages/User";
+import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 
 function App() {
