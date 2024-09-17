@@ -20,11 +20,11 @@
 
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { logoutUser } from "../../redux/reducers/authSlice";
+import { logoutUser } from "../../redux/slices/auth/authSlice";
 import "./Header.css";
 
 const Header = () => {
-  const { token, isAuthenticated } = useSelector((state) => state.auth);
+  const { token, isAuthenticated, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   return (
@@ -34,7 +34,7 @@ const Header = () => {
           <h1>
             Welcome back
             <br />
-            {user.username || "User"}!
+            {user?.username || "User"}!
           </h1>
           <button className="edit-button">Edit Name</button>
           <button

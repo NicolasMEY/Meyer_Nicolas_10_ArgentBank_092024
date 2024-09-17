@@ -5,6 +5,7 @@ import Header from "./components/header/Header";
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
 import User from "./pages/User";
+import Footer from "./components/footer/Footer";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="signin" element={<SignIn />} />
         <Route path="*" element={<div>Error404</div>} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

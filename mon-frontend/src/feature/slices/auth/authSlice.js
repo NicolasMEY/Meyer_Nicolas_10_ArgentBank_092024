@@ -1,6 +1,7 @@
-// REDUCER et ACTIONS LIEES À L'AUTHENTIFICATION : Ce fichier contient la gestion des actions de connexion, déconnexion et de stockage de l'utilisateur connecté.
+// REDUCER et ACTIONS LIEES À L'AUTHENTIFICATION (login/logout) : Ce fichier contient la gestion des actions de connexion, déconnexion et de stockage de l'utilisateur connecté.
 
 import { createSlice } from "@reduxjs/toolkit";
+// permet de fusionner l'action et le reducer
 
 const initialState = {
   token: null,
@@ -8,6 +9,8 @@ const initialState = {
   isLoading: false,
   error: null,
 };
+
+// Les reducers sont des fonctions pures qui modifient l'état en réponse à une action. Les reducers définis ici vont gérer les changements de l'état pour l'authentification. RTK génère automatiquement les actions associées aux reducers.
 
 const authSlice = createSlice({
   name: "auth",
@@ -41,9 +44,9 @@ const authSlice = createSlice({
   },
 });
 
+// l'action et le reducer sont au meme endroit
 export const { loginStart, loginSuccess, loginFailure, logoutUser } =
   authSlice.actions;
-
 export default authSlice.reducer;
 
 // Explications :
