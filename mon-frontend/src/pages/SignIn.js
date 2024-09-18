@@ -8,7 +8,9 @@ const SignIn = () => {
   return (
     <div>
       <Navigation />
-      <Signinform />
+      <main>
+        <Signinform />
+      </main>
       <Footer />
     </div>
   );

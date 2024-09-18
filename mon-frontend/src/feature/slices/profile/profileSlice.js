@@ -58,5 +58,7 @@ const profileSlice = createSlice({
   },
 });
 
+export const selectUser = (state) => state.profile.userInfo;
+
 export const { resetProfile, setProfile } = profileSlice.actions;
 export default profileSlice.reducer;

@@ -1,17 +1,38 @@
+// Le composant SignInForm est responsable de l'interface utilisateur pour la connexion. Il gère l'état local pour les champs de saisie, envoie des actions Redux pour le suivi du processus de connexion, et utilise axios pour communiquer avec l'API de connexion. En cas de succès, il redirige l'utilisateur vers la page de profil, et en cas d'échec, il affiche le message d'erreur correspondant.
+
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../redux/slices/auth/authThunks";
-import "./SignInForm.css";
+import { useDispatch } from "react-redux";
+import {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+} from "../../feature/slices/auth/authSlice";
+import { useNavigate } from "react-router-dom";
+import "./Signinform.css";
+import axios from "axios";
 
 const SignInForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState(""); // état local
+  const [password, setPassword] = useState(""); // état local
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(loginUser({ username, password }));
+    dispatch(loginStart()); // Appel pour indiquer que la connexion est en cours
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/api/v1/user/login",
+        {
+          username,
+          password,
+        }
+      );
+      dispatch(loginSuccess(response.data.token)); // Si la requête réussit, le token est stocké dans Redux avec dispatch.........
+      navigate("/user"); // Redirige vers la page User après connexion réussie
+    } catch (error) {
+      dispatch(loginFailure(error.response.data.message)); // Si la requête échoue, l'erreur est stockée dans Redux avec dispatch ...........
+    }
   };
 
   return (
@@ -43,14 +64,9 @@ const SignInForm = () => {
               <input type="checkbox" id="remember-me" />
               <label htmlFor="remember-me">Remember me</label>
             </div>
-            <button
-              type="submit"
-              className="sign-in-button"
-              disabled={isLoading}
-            >
-              {isLoading ? "Signing In..." : "Sign In"}
+            <button type="submit" className="sign-in-button">
+              Sign In
             </button>
-            {error && <p className="error-message">{error}</p>}
           </form>
         </section>
       </main>
