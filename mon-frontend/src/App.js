@@ -1,15 +1,15 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./styles/main.css";
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
 import User from "./pages/User";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
       <Header />
       <Routes>
         <Route path="/" element={<Index />} />
@@ -18,7 +18,7 @@ function App() {
         <Route path="*" element={<div>Error404</div>} />
       </Routes>
       <Footer />
-    </BrowserRouter>
+    </>
   );
 }
 

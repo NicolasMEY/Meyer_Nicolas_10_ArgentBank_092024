@@ -1,38 +1,11 @@
-// Affiche les informations du profil utilisateur, récupérées depuis le store Redux.
-
-// import React from "react";
-// import { useSelector } from "react-redux";
-
-// const Profile = () => {
-//   const { userInfo, isLoading, error } = useSelector((state) => state.profile);
-
-//   if (isLoading) {
-//     return <div>Loading...</div>;
-//   }
-
-//   if (error) {
-//     return <div>Error: {error}</div>;
-//   }
-
-//   return (
-//     <div>
-//       <h1>Profil de {userInfo?.username}</h1>
-//       <p>Nom: {userInfo?.firstName}</p>
-//       <p>Prénom: {userInfo?.lastName}</p>
-//       <p>Pseudo: {userInfo?.username}</p>
-//     </div>
-//   );
-// };
-
-// export default Profile;
-
 // Le composant Profile est chargé de gérer l'affichage et la mise à jour des informations de profil de l'utilisateur.  Affiche les informations actuelles de l'utilisateur et permet de mettre à jour le nom d'utilisateur. Utilise Redux pour accéder à l'état global (informations de l'utilisateur, état de chargement, erreurs). Utilise l'état local pour gérer le nom d'utilisateur avant la soumission.
 
 import React, { useState } from "react"; //Pour créer le composant et gérer l'état local
 import { useSelector, useDispatch } from "react-redux";
+import { updateProfile } from "../../feature/slices/profile/profileThunks";
 import {
-  updateProfile,
-  selectUserInfo,
+  // updateProfile,
+  selectUser,
   selectIsLoading,
   selectError,
 } from "../../feature/slices/profile/profileSlice";
@@ -40,7 +13,7 @@ import "./Profile.css";
 
 const Profile = () => {
   const dispatch = useDispatch(); // Permet d'envoyer des actions au store de Redux
-  const userInfo = useSelector(selectUserInfo); // Infos sur l'utilisateur du store
+  const userInfo = useSelector(selectUser); // Infos sur l'utilisateur du store
   const isLoading = useSelector(selectIsLoading); // Vérifier si une requête est en cours
   const error = useSelector(selectError);
   const [username, setUsername] = useState(userInfo?.username || ""); // Ici username est l'état local pour stoker le nom d'utilisateur avant de le soumettre et setUsername fct pour maj l'état local du nom d'utilisateur... chaine vide si nul ou undefined
