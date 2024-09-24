@@ -1,21 +1,23 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 import "./styles/main.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import Index from "./pages/Index";
 import SignIn from "./pages/SignIn";
 import User from "./pages/User";
-import Header from "./components/header/Header";
+import Error from "./pages/Error/Error";
 import Footer from "./components/footer/Footer";
-import { Routes, Route } from "react-router-dom";
+import Navigation from "./components/navigation/Navigation";
 
 function App() {
   return (
     <>
-      <Header />
+      <Navigation />
       <Routes>
         <Route path="/" element={<Index />} />
-        <Route path="user" element={<User />} />
         <Route path="signin" element={<SignIn />} />
-        <Route path="*" element={<div>Error404</div>} />
+        <Route path="user" element={<User />} />
+        <Route path="*" element={<Error />} />
       </Routes>
       <Footer />
     </>

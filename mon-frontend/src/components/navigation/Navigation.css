@@ -19,10 +19,6 @@
   margin-right: 0.5rem;
 }
 
-.main-nav-item i {
-  margin-right: 0.5rem;
-}
-
 .main-nav-item:hover {
   text-decoration: underline;
 }
@@ -35,4 +31,38 @@
 .main-nav-logo-image {
   max-width: 100%;
   width: 200px;
+}
+
+.fa-user-circle {
+  margin-right: 5px;
+}
+
+.logout-btn {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: "Avenir";
+  color: #2c3e50;
+  margin-right: 0.5rem;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.logout-btn:hover {
+  text-decoration: underline;
+}
+
+.user-name {
+  font-family: "Avenir";
+  color: #42b983;
+  margin-right: 0.5rem;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.userName-link {
+  text-decoration: none;
+}
+.userName-link:hover {
+  text-decoration: underline;
 }

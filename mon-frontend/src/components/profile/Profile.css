@@ -1,0 +1,46 @@
+.editForm-container {
+  display: flex;
+  /* width: 270px; */
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 10px;
+}
+
+.editForm-title {
+  font-size: 2em;
+}
+
+.editInput-wrapper label {
+  margin-right: 10px;
+}
+
+.editInput-wrapper input {
+  height: 25px;
+  width: 130px;
+}
+
+.editName-button-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 280px;
+  margin-top: 10px;
+}
+
+.editName-button {
+  width: 100%;
+  padding: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 1rem;
+  border-color: #00bc77;
+  background-color: #00bc77;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.editName-button:hover {
+  background-color: #06a068;
+}

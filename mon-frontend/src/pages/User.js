@@ -1,50 +1,77 @@
-import React, { useState } from "react";
-import Header from "../components/header/Header";
-import Account from "../components/account/Account";
+// Page du profil utilisateur
+
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Profile from "../components/profile/Profile";
-import Footer from "../components/footer/Footer";
-import "../styles/main.css";
+import Account from "../components/account/Account";
 
 const User = () => {
-  const [isEditing, setIsEditing] = useState(false); // Gérer l'état d'édition
+  document.title = "Argent Bank - Profile";
 
-  const handleEditClick = () => {
-    setIsEditing(true); // Passe en mode édition quand on clique sur "Edit name"
-  };
+  // hooks et état
+  const navigate = useNavigate(); // Permet de naviguer entre les différentes pages de l'app
+  const { userInfo } = useSelector((state) => state.profile); // récupéré depuis le store, contient les infos de l'utilisateur connecté
+  const [isEditing, setIsEditing] = useState(false); // Etat local qui détermine si l'utilisateur est en mode édition ou non
+  const [fullName, setFullName] = useState(""); // Etat local qui stocke le nom du user
+  const token = JSON.parse(localStorage.getItem("token"));
+
+  // Effet de bord
+  useEffect(() => {
+    // Si le token n'existe pas, cela signifie que l'utilisateur n'est pas connecté, et il est redirigé vers la page d'accueil
+    if (!token) {
+      navigate("/");
+    }
+    // Si les informations de l'utilisateur sont disponibles (userInfo), le nom complet est formé à partir du prénom (firstName) et du nom de famille (lastName) et est stocké dans l'état fullName.
+    if (userInfo) {
+      const { firstName, lastName } = userInfo.body;
+      setFullName(`${firstName} ${lastName}`);
+    }
+  }, [userInfo, token, navigate]);
 
   return (
     <div>
-      <Header onEdit={handleEditClick} />
-      {/* Passe la fonction à Header */}
       <main className="main bg-dark">
-        {isEditing ? (
-          <Profile />
-        ) : (
-          // Affiche le composant Profile si on est en mode édition
-          <>
-            <Account
-              title="Argent Bank Checking (x8349)"
-              amount="$2,082.79"
-              description="Available Balance"
-            />
-            <Account
-              title="Argent Bank Savings (x6712)"
-              amount="$10,928.42"
-              description="Available Balance"
-            />
-            <Account
-              title="Argent Bank Credit Card (x8349)"
-              amount="$184.30"
-              description="Current Balance"
-            />
-          </>
-        )}
+        <div className="header" style={{ padding: "10px 0" }}>
+          {/* Mode édition */}
+          {/* Si isEditing est vrai, le composant Profile est affiché pour permettre à l'utilisateur de modifier son nom. Sinon, un message de bienvenue et un bouton "Edit Name" sont affichés. Lorsque ce bouton est cliqué, setIsEditing(true) est appelé pour activer le mode édition */}
+          {isEditing ? (
+            <Profile setIsEditing={setIsEditing} />
+          ) : (
+            <>
+              <h1>
+                Welcome back
+                <br /> {fullName} !
+              </h1>
+              <button
+                className="edit-button"
+                onClick={() => setIsEditing(true)}
+              >
+                Edit Name
+              </button>
+            </>
+          )}
+        </div>
+        <>
+          <Account
+            title="Argent Bank Checking (x8349)"
+            amount="$2,082.79"
+            description="Available Balance"
+          />
+          <Account
+            title="Argent Bank Savings (x6712)"
+            amount="$10,928.42"
+            description="Available Balance"
+          />
+          <Account
+            title="Argent Bank Credit Card (x8349)"
+            amount="$184.30"
+            description="Current Balance"
+          />
+        </>
       </main>
-      <Footer />
     </div>
   );
 };
 
 export default User;
-
-// L'état isEditing détermine si le composant Profile doit être affiché. Lorsque l'utilisateur clique sur "Edit Name" dans le Header, la fonction handleEditClick est appelée, ce qui change l'état isEditing à true, et ainsi le formulaire de modification du nom d'utilisateur dans Profile s'affiche. La page User contient le Header et le Profile. Ce composant doit gérer l'état de savoir si l'utilisateur est en mode édition ou non. L'état isEditing serait défini dans la page User.

@@ -1,0 +1,28 @@
+.error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  padding: 180px 20px;
+  background-color: #12002b;
+}
+
+.error-title {
+  color: #ffffff;
+  font-size: 30px;
+}
+
+.error-text {
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.error-link {
+  font-size: 18px;
+  color: #ffffff;
+  border-bottom: 1px solid white;
+}
+.error-link:hover {
+  color: #00bc77;
+}
