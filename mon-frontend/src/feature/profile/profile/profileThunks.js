@@ -31,6 +31,7 @@ const userProfile = async () => {
       "Failed to fetch user profile:",
       error.response ? error.response.data : error.message
     );
+    console.error("Full response:", error.response);
     throw error;
   }
 };

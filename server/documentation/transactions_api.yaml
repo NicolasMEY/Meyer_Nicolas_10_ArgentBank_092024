@@ -1,0 +1,261 @@
+# Explications des sections
+# swagger: Version de Swagger utilisée (ici, 2.0).
+# info: Contient les informations sur l'API, comme le titre, la description et la version.
+# host, basePath, schemes: Définissent la base URL pour toutes les requêtes API.
+# consumes et produces: Spécifient les types MIME pris en charge par l'API.
+# paths: Définit les routes et les opérations associées (GET, PUT, DELETE) pour gérer les transactions.
+# parameters: Détails des paramètres passés dans les requêtes, incluant leur type et leur description.
+# responses: Pour chaque opération, définit les codes de réponse possibles et les descriptions associées.
+# definitions: Définit le modèle de données Transaction qui décrit la structure des données de transaction.
+
+
+swagger: '2.0'
+info:
+  title: "Bank Argent API Documentation"
+  description: "Contains all available API endpoints in this codebase"
+  version: "1.0.0"
+  termsOfService: 'http://swagger.io/terms/'
+host: "localhost:3001"
+basePath: "/api/v1"
+schemes:
+  - "http"
+paths:
+
+  /account/{account_id}/transactions:
+    get:
+      security: 
+        - Bearer: []
+      tags:
+        - "User Transactions"
+      summary: "Afficher toutes les transactions d'un compte"
+      description: "API pour récupérer toutes les transactions par compte"
+      parameters:
+        - in: header
+          name: Authorization
+          description: "Attache Bearer JWT token"
+          required: true
+          type: string
+        - name: account_id
+          in: path
+          description: "Account ID"
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: "Transactions de l'utilisateur récupérées avec succès"
+          schema:
+            $ref: "#/definition/TransactionsResponse"
+        "400":
+          description: "Invalid Account"
+        "401": 
+          description: "Unauthorized, invalid token"
+        "500": 
+          description: "Internal Server Error"
+
+  /transactions/{transaction_id}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - "Transactions Details"
+      summary: "Détails de la transaction de l'utilisateur"
+      description: "API pour obtenir les détails d'une transaction"
+      parameters:
+        - in: header
+          name: Authorization
+          description: "Attach Bearer JWT token"
+          required: true
+          type: string
+        - name: transaction_id
+          in: path
+          description: "Transaction ID"
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: "Transaction details retrieved successfully"
+          schema:
+            $ref: "#/definitions/Transaction"
+        "400":
+          description: "Invalid account or transaction ID"
+        "401":
+          description: "Unauthorized, invalid token"
+        "500":
+          description: "Internal Server Error"
+
+    patch: 
+    # La méthode PATCH permet de modifier seulement les champs nécessaires d'une ressource, contrairement à PUT, qui requiert que l'ensemble de la ressource soit envoyé, même si seuls quelques champs doivent être modifiés. 
+      security:
+        - Bearer: []
+      tags:
+        - "User Transactions Module"
+      summary: "MAJ de la transaction de l'utilisateur"
+      description: "API pour mettre à jour les informations de la transaction"
+      parameters:
+        - in: header
+          name: Authorization
+          description: "Attach Bearer JWT token"
+          required: true
+          type: string
+        - in: path
+          name: transaction_id
+          description: "Transaction ID"
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: "Update transaction information"
+          required: true
+          schema:
+            $ref: "#/definitions/EditTransaction"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: "User transaction info updated successfully"
+          schema:
+            $ref: "#/definitions/EditTransactionResponse"
+        "400":
+          description: "Invalid Fields"
+        "401":
+          description: "Unauthorized, invalid token"
+        "403":
+          description: "Unauthorized, user not allowed to update this transaction"
+        "500":
+          description: "Internal Server Error"
+
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - "User Transactions"
+      summary: "Supprimer une note de transaction"
+      description: "API pour supprimer une note"
+      parameters:
+        - in: header
+          name: Authorization
+          description: "Attach Bearer JWT Token"
+          required: true
+          type: string
+        - in: path
+          name: transaction_id
+          description: "Transaction ID"
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "204":
+          description: "Delete completed successfully"
+        "400":
+          description: "Invalid Fields"
+        "401":
+          description: "Unauthorized, invalid token"
+        "403":
+          description: "Unauthorized, user not allowed to delete this transaction"
+        "500":
+          description: "Internal Server Error"
+
+securityDefinitions:
+  Bearer:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+
+definitions:
+  TransactionsResponse:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+      message:
+        type: "string"
+      body:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "integer"
+              description: "Transactions ID"
+            date:
+              type: "string"
+              description: "transaction date"
+            description:
+              type: "string"
+              description: "transaction description"
+            amount:
+              type: "number"
+              description: "transaction amount"
+            balance:
+              type: "number"
+              description: "account balance after transaction"
+        example:
+          - id: 1
+            date: "string"
+            description: "string"
+            amount: "number"
+            balance: "number"
+          - id: 2
+            date: "string"
+            description: "string"
+            amount: "number"
+            balance: "number"
+          - id: 3
+            date: "string"
+            description: "string"
+            amount: "number"
+            balance: "number"
+
+  Transaction:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+      message:
+        type: "string"
+      body:
+        type: "object"
+        properties:
+          id:
+            type: "integer"
+            description: "transaction ID"
+          transactionType:
+            type: "string"
+            description: "transaction type"
+          category:
+            type: "string"
+            description: "transaction category"
+          note:
+            type: "string"
+            description: "user's notes for transaction"
+
+
+  EditTransaction:
+    type: "object"
+    properties:
+      category:
+        type: "string"
+      note:
+        type: "string"
+        
+  EditTransactionResponse:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+      message:
+        type: "string"
+      body:
+        type: "object"
+        properties:
+          category:
+            type: "string"
+            description: "Categroy updated"
+          note:
+            type: "string"
+            description: "Note updated"
