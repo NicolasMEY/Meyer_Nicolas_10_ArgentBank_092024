@@ -8,6 +8,11 @@
 # responses: Pour chaque opération, définit les codes de réponse possibles et les descriptions associées.
 # definitions: Définit le modèle de données Transaction qui décrit la structure des données de transaction.
 
+# Ce document Swagger fournit une description complète des endpoints pour gérer les transactions bancaires des utilisateurs. Il inclut :
+# La récupération des transactions par compte.
+# L'accès aux détails spécifiques d'une transaction.
+# La possibilité de modifier ou de supprimer les informations d'une transaction. Les réponses sont standardisées et les mécanismes de sécurité sont bien définis via des tokens JWT.
+
 
 swagger: '2.0'
 info:
@@ -133,8 +138,8 @@ paths:
         - Bearer: []
       tags:
         - "User Transactions"
-      summary: "Supprimer une note de transaction"
-      description: "API pour supprimer une note"
+      summary: "Supprimer une note de transaction et les caégories"
+      description: "API pour supprimer une note et une caégorie d'une transaction"
       parameters:
         - in: header
           name: Authorization
@@ -150,13 +155,13 @@ paths:
         - application/json
       responses:
         "204":
-          description: "Delete completed successfully"
+          description: "Transaction note and category deleted successfully"
         "400":
           description: "Invalid Fields"
         "401":
           description: "Unauthorized, invalid token"
         "403":
-          description: "Unauthorized, user not allowed to delete this transaction"
+          description: "Unauthorized, user not allowed to delete this note and this category"
         "500":
           description: "Internal Server Error"
 
@@ -166,6 +171,7 @@ securityDefinitions:
     name: "Authorization"
     in: "header"
 
+# la section definitions joue un rôle crucial dans la spécification des données échangées entre le client et le serveur. Elle permet de structurer, documenter et valider les données, ce qui améliore la compréhension et la sécurité de l'API.
 definitions:
   TransactionsResponse:
     type: "object"

@@ -14,7 +14,9 @@ const User = () => {
   const { userInfo } = useSelector((state) => state.profile); // récupéré depuis le store, contient les infos de l'utilisateur connecté
   const [isEditing, setIsEditing] = useState(false); // Etat local qui détermine si l'utilisateur est en mode édition ou non
   const [fullName, setFullName] = useState(""); // Etat local qui stocke le nom du user
-  const token = JSON.parse(localStorage.getItem("token"));
+  const { token } = useSelector((state) => state.auth); // récupéré depuis le store, contient le token de l'utilisateur connecté
+
+  console.log("userInfo", userInfo);
 
   // Effet de bord
   useEffect(() => {
@@ -24,7 +26,7 @@ const User = () => {
     }
     // Si les informations de l'utilisateur sont disponibles (userInfo), le nom complet est formé à partir du prénom (firstName) et du nom de famille (lastName) et est stocké dans l'état fullName.
     if (userInfo) {
-      const { firstName, lastName } = userInfo.body;
+      const { firstName, lastName } = userInfo;
       setFullName(`${firstName} ${lastName}`);
     }
   }, [userInfo, token, navigate]);

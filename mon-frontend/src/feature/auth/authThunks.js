@@ -3,12 +3,12 @@
 import axios from "axios";
 
 // Login user
-const login = async (userData) => {
+const login = async ({ email, password }) => {
   // Fonction asynchrone qui permet de connecter un utilisateur
-  const response = await axios.post(
-    "http://localhost:3001/api/v1/user/login",
-    userData
-  );
+  const response = await axios.post("http://localhost:3001/api/v1/user/login", {
+    email,
+    password,
+  });
 
   if (response.status === 200) {
     localStorage.setItem("user", JSON.stringify(response.data));
@@ -17,8 +17,8 @@ const login = async (userData) => {
 
   // Vérifie si la case à cocher "Remember Me" est sélectionnée
   if (document.getElementById("remember-me").checked) {
-    localStorage.setItem("email", JSON.stringify(userData.email));
-    localStorage.setItem("password", JSON.stringify(userData.password));
+    localStorage.setItem("email", JSON.stringify(email));
+    localStorage.setItem("password", JSON.stringify(password));
   } else {
     localStorage.removeItem("email");
     localStorage.removeItem("password");

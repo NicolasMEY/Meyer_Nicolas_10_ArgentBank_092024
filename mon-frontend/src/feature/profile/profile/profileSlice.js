@@ -1,33 +1,14 @@
 // Gestion de l'état du profil utilisateur, incluant le chargement, le succès et l'échec des requêtes pour récupérer les informations du profil tout en assurant que les données sont bien synchronisées avec le store Redux.
 
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import profileThunks from "./profileThunks";
+import { createSlice } from "@reduxjs/toolkit";
+import { userProfile } from "./profileThunks";
 
 const initialState = {
-  userInfo: "",
-  isError: false,
+  userInfo: null,
+  error: null,
   isSuccess: false,
   isLoading: false,
-  message: "",
 };
-
-export const userProfile = createAsyncThunk(
-  // thunk asynchrone pour récupérer les données du profil utilisateur
-  "profile/userName",
-  async (thunkAPI) => {
-    try {
-      return await profileThunks.userProfile();
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
 
 export const profileSlice = createSlice({
   name: "profile",
@@ -35,9 +16,9 @@ export const profileSlice = createSlice({
   reducers: {
     resetProfile: (state) => {
       state.isLoading = false;
-      state.isError = false;
+      state.error = null;
       state.isSuccess = false;
-      state.message = "";
+      state.userInfo = null;
     },
   },
   // ExtraReducers : ce bloc gère les différentes étapes de la requête asynchrone (en attente, succès, rejetée...)
@@ -53,8 +34,7 @@ export const profileSlice = createSlice({
       })
       .addCase(userProfile.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
+        state.error = action.payload;
         state.userInfo = null;
       });
   },

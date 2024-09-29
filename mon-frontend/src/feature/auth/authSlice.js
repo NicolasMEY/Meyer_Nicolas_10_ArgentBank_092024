@@ -3,31 +3,39 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authThunks from "./authThunks"; // Service contenant les fonctions login et logout pour gérer les requêtes API liées à l'authentification
 
-// On récupère l'utilisateur du localStorage
-const user = JSON.parse(localStorage.getItem("user")); // Charge l'utilisateur depuis le LS (si un utilisateur est connecté, ses données y sont stockées)
-
 const initialState = {
-  user: user ? user : null,
-  isError: false,
+  token: null,
+  error: null,
   isSuccess: false,
   isLoading: false,
-  message: "",
 };
 
 // Thunk pour le login
 export const login = createAsyncThunk(
   "auth/login",
-  async (userData, thunkAPI) => {
+  async ({ email, password }, thunkAPI) => {
     try {
-      return await authThunks.login(userData);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
+      const response = await fetch("http://localhost:3001/api/v1/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.status === 200) {
+        return { token: data.body.token };
+      } else {
+        return thunkAPI.rejectWithValue(data.message);
+      }
+    } catch (err) {
+      return thunkAPI.rejectWithValue("An error occurred. Please try again.");
     }
   }
 );
@@ -45,7 +53,7 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.isError = false;
       state.isSuccess = false;
-      state.message = "";
+      state.error = null;
     },
   },
   // ExtraReducers : ce bloc gère les différentes étapes de la requête asynchrone (état des thunks) (login et logout, en attente, succès, rejetée...)
@@ -57,16 +65,16 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
+        state.token = action.payload.token;
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-        state.user = null;
+        state.error = action.payload;
       })
       .addCase(logout.fulfilled, (state) => {
-        state.user = null;
+        state.token = null;
+        state.error = null;
+        state.isLoading = false;
       });
   },
 });

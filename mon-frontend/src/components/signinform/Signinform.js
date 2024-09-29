@@ -76,6 +76,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../feature/auth/authSlice";
+import { userProfile } from "../../feature/profile/profile/profileSlice";
 
 export default function SignInForm() {
   const [formData, setFormData] = useState({
@@ -136,7 +137,7 @@ export default function SignInForm() {
 
     // Si la connexion est un succès ou qu'il y a des données de notre réponse, alors on redirige vers la page profil
     if (isSuccess || user) {
-      navigate("/profile");
+      navigate("/user");
     }
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 
