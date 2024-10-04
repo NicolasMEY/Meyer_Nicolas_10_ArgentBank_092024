@@ -1,4 +1,4 @@
-// Module qui utilise Axios pour faire une requête HTTP afin de modifier le nom d'utilisateur d'un utilisateur
+// Module qui gère la logique des appels API
 
 import axios from "axios";
 
@@ -6,7 +6,9 @@ import axios from "axios";
 const updateUser = async (userData) => {
   // userData représente les données utilisateur qui doivent etre maj
   const token = localStorage.getItem("token"); // récupération du token dans le LS
+  console.log("Jeton brut:", token);
   const tokenParse = JSON.parse(token);
+  console.log(tokenParse); // Pour vérifier si le jeton est bien formaté
   const response = await axios.put(
     "http://localhost:3001/api/v1/user/profile",
     userData, // les données à maj passées comme deuxième argument de la fonction put

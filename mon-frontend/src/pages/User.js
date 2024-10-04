@@ -2,15 +2,17 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Profile from "../components/profile/Profile";
 import Account from "../components/account/Account";
+import { userProfile } from "../feature/profile/profile/profileThunks";
 
 const User = () => {
   document.title = "Argent Bank - Profile";
 
   // hooks et état
   const navigate = useNavigate(); // Permet de naviguer entre les différentes pages de l'app
+  const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.profile); // récupéré depuis le store, contient les infos de l'utilisateur connecté
   const [isEditing, setIsEditing] = useState(false); // Etat local qui détermine si l'utilisateur est en mode édition ou non
   const [fullName, setFullName] = useState(""); // Etat local qui stocke le nom du user
@@ -20,12 +22,21 @@ const User = () => {
 
   // Effet de bord
   useEffect(() => {
+    console.log("Token :", token);
+    console.log("userInfo dans useEffect:", userInfo);
     // Si le token n'existe pas, cela signifie que l'utilisateur n'est pas connecté, et il est redirigé vers la page d'accueil
     if (!token) {
       navigate("/");
     }
+
+    // 2. Si userInfo est vide mais le token est disponible, essayez de récupérer les informations utilisateur
+    if (token && !userInfo) {
+      // Dispatch action pour récupérer les informations utilisateur ici
+      dispatch(userProfile(token)); // Déclencher la récupération de userInfo avec le token
+    }
+
     // Si les informations de l'utilisateur sont disponibles (userInfo), le nom complet est formé à partir du prénom (firstName) et du nom de famille (lastName) et est stocké dans l'état fullName.
-    if (userInfo) {
+    if (userInfo && !fullName) {
       const { firstName, lastName } = userInfo;
       setFullName(`${firstName} ${lastName}`);
     }

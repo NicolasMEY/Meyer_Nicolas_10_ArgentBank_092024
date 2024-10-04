@@ -4,6 +4,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import updateUserName from "./UpdateUserNameThunks";
 
 const initialState = {
+  // état de départ de la partie du store géré
   data: null,
   isError: false, // indique s'il y a une erreur lors de la maj
   isSuccess: false,
@@ -13,10 +14,11 @@ const initialState = {
 
 // MAJ du nom d'utilisateur avec CAT (qui, pour rappel, est une fonction fournie par RTk pour gérer les actions asynchrones, comme des appels API)
 export const updateUser = createAsyncThunk(
-  "newUserName",
+  // updateUser est l'action asynchrone
+  "newUserName", // type d'action
   async (data, thunkAPI) => {
     try {
-      return await updateUserName.updateUser(data);
+      return await updateUserName.updateUser(data); // Envoi des données à l'API
     } catch (error) {
       const message =
         (error.response &&
@@ -24,7 +26,7 @@ export const updateUser = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(message); // Renvoie un msg d'erreur si la requête échoue
     }
   }
 );
@@ -35,14 +37,14 @@ export const userNameSlice = createSlice({
   initialState,
   reducers: {
     resetUserName: (state) => {
-      // Action qui permet de réinitialiser l'état à ses valeurs par défaut
+      // Action qui permet de réinitialiser tous les états à leurs valeurs par défaut
       state.isLoading = false;
       state.isError = false;
       state.isSuccess = false;
       state.message = "";
     },
   },
-  // ExtraReducers : ce bloc gère les différentes étapes de la requête asynchrone (en attente, succès, rejetée...)
+  // ExtraReducers : ce bloc gère les différentes étapes de la requête asynchrone (en attente, succès, erreur...)
   extraReducers: (builder) => {
     builder
       .addCase(updateUser.pending, (state) => {
@@ -51,13 +53,13 @@ export const userNameSlice = createSlice({
       .addCase(updateUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.data = action.payload; // payload = données supplémentaires
+        state.data = action.payload; // payload = données supplémentaires, la réponse API est stockée dans state.data > le nouveau nom utilisateur
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
-        state.data = null;
+        state.message = action.payload; // renseigné avec l'erreur retournée par l'API
+        state.data = null; // les données sont alors remises à null
       });
   },
 });

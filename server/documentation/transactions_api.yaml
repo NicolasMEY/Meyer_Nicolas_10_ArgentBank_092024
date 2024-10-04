@@ -1,17 +1,14 @@
-# Explications des sections
-# swagger: Version de Swagger utilisée (ici, 2.0).
-# info: Contient les informations sur l'API, comme le titre, la description et la version.
-# host, basePath, schemes: Définissent la base URL pour toutes les requêtes API.
-# consumes et produces: Spécifient les types MIME pris en charge par l'API.
-# paths: Définit les routes et les opérations associées (GET, PUT, DELETE) pour gérer les transactions.
-# parameters: Détails des paramètres passés dans les requêtes, incluant leur type et leur description.
-# responses: Pour chaque opération, définit les codes de réponse possibles et les descriptions associées.
-# definitions: Définit le modèle de données Transaction qui décrit la structure des données de transaction.
-
 # Ce document Swagger fournit une description complète des endpoints pour gérer les transactions bancaires des utilisateurs. Il inclut :
 # La récupération des transactions par compte.
 # L'accès aux détails spécifiques d'une transaction.
 # La possibilité de modifier ou de supprimer les informations d'une transaction. Les réponses sont standardisées et les mécanismes de sécurité sont bien définis via des tokens JWT.
+
+# Explications des sections
+# host, basePath, schemes: Définissent la base URL pour toutes les requêtes API.
+# paths: Définit les routes et les opérations associées (GET, PUT, DELETE) pour gérer les transactions.
+# parameters: Détails des paramètres passés dans les requêtes, incluant leur type et leur description.
+# responses: Pour chaque opération, définit les codes de réponse possibles et les descriptions associées.
+# definitions: Définit le modèle de données Transaction qui décrit la structure des données de transaction.
 
 
 swagger: '2.0'

@@ -9,16 +9,13 @@ const Profile = ({ setIsEditing }) => {
   const dispatch = useDispatch();
 
   // State Redux
-  const { userInfo } = useSelector((state) => state.profile); // récupère les données utilisateur depuis le store Redux
-  const { data, isSuccess } = useSelector((state) => state.newUserName); // récupère le statut et les données après mise à jour
+  const { userInfo } = useSelector((state) => state.profile); // On récupère les données utilisateur depuis le store Redux
+  const { data, isSuccess } = useSelector((state) => state.newUserName); // On récupère le statut et les données après mise à jour
 
   // State local
   const [userData, setUserData] = useState({
-    // stocke le nom d'utilisateur saisi dans le formulaire (userData) et l'état d'affichage du profil (userProfile)
-    userName: "",
-    // userInfo?.body?.userName || "",
+    userName: "", // stocke le nom d'utilisateur saisi dans le formulaire (userData) et l'état d'affichage du profil (userProfile)
   });
-  // const [userProfile, setUserProfile] = useState(userData.userName);
   const [userProfile, setUserProfile] = useState(""); // stocke le nom d'utilisateur actuel du profil
 
   //  Capture des changements dans le formulaire : chaque fois que l'utilisateur modifie l'input userName, cette fonction met à jour l'état userData avec la nouvelle valeur saisie
@@ -34,8 +31,8 @@ const Profile = ({ setIsEditing }) => {
   // Soumission du formulaire et maj du nom d'utilisateur
   const handleSubmitUserName = (e) => {
     e.preventDefault();
-
-    dispatch(updateUser({ userName })); // updateUser est une action asynchrone Redux définie dans le UpdateUserNameSlice qui envoie une requête au backend pour mettre à jour le nom d'utilisateur.
+    console.log(userName);
+    dispatch(updateUser({ userName }));
     setIsEditing(false);
   };
 
