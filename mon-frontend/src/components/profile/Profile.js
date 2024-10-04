@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../../feature/UpdateUserName/UpdateUserNameSlice";
+import { updateUser } from "../../feature/UpdateUserName/UpdateUserNameThunks";
 import "./profile.css";
 
 const Profile = ({ setIsEditing }) => {
@@ -13,26 +13,17 @@ const Profile = ({ setIsEditing }) => {
   const { data, isSuccess } = useSelector((state) => state.newUserName); // On récupère le statut et les données après mise à jour
 
   // State local
-  const [userData, setUserData] = useState({
-    userName: "", // stocke le nom d'utilisateur saisi dans le formulaire (userData) et l'état d'affichage du profil (userProfile)
-  });
-  const [userProfile, setUserProfile] = useState(""); // stocke le nom d'utilisateur actuel du profil
+  const [userData, setUserData] = useState(userInfo?.userName || ""); // stocke le nom d'utilisateur saisi dans le formulaire (userData) et l'état d'affichage du profil (userProfile)
 
   //  Capture des changements dans le formulaire : chaque fois que l'utilisateur modifie l'input userName, cette fonction met à jour l'état userData avec la nouvelle valeur saisie
   const onChange = (e) => {
-    setUserData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value, // met à jour le champ `userName` dans l'objet `userData`
-    }));
+    setUserData(e.target.value);
   };
-
-  const { userName } = userData;
 
   // Soumission du formulaire et maj du nom d'utilisateur
   const handleSubmitUserName = (e) => {
     e.preventDefault();
-    console.log(userName);
-    dispatch(updateUser({ userName }));
+    dispatch(updateUser({ userData }));
     setIsEditing(false);
   };
 
@@ -46,22 +37,12 @@ const Profile = ({ setIsEditing }) => {
   useEffect(() => {
     // Si un utilisateur est connecté, alors on actualise le state avec l'userName du profil
     if (userInfo && userInfo.body) {
-      const userNameProfile = userInfo.body.userName; // extrait le nom d'utilisateur du profil
-      setUserProfile(userNameProfile); // met à jour le state local `userProfile`
-      setUserData((prevState) => ({
-        ...prevState,
-        userName: userNameProfile, // pré-remplit l'input avec le nom d'utilisateur actuel
-      }));
+      setUserData(userInfo.userName);
     }
 
     // si la mise à jour du nom d'utilisateur réussit (isSuccess), on extrait le nouveau nom d'utilisateur et on met à jour les états locaux avec cette nouvelle valeur
     if (isSuccess && data.body) {
-      const newUserName = data.body.userName; // extrait le nouveau nom d'utilisateur après la mise à jour
-      setUserProfile(newUserName); // met à jour l'état local avec le nouveau nom d'utilisateur
-      setUserData((prevState) => ({
-        ...prevState,
-        userName: newUserName, // Met à jour l'input avec le nouvel nom d'utilisateur
-      }));
+      setUserData(data.body.userName);
     }
   }, [isSuccess, userInfo, data]); // dépendances: quand `isSuccess`, `userInfo` ou `data` changent, ce useEffect est déclenché
 
@@ -75,8 +56,8 @@ const Profile = ({ setIsEditing }) => {
           type="text"
           id="userName"
           name="userName"
-          value={userName}
-          placeholder={userProfile} // Affiche le nom d'utilisateur actuel comme placeholder
+          value={userData}
+          placeholder={userData} // Affiche le nom d'utilisateur actuel comme placeholder
           onChange={onChange}
           required
         />

@@ -48,7 +48,7 @@ paths:
         "200":
           description: "Transactions de l'utilisateur récupérées avec succès"
           schema:
-            $ref: "#/definition/TransactionsResponse"
+            $ref: "#/definitions/TransactionsResponse"
         "400":
           description: "Invalid Account"
         "401": 

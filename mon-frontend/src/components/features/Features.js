@@ -1,9 +1,9 @@
 // Le composant Features présente les principales caractéristiques et avantages de l'Argent Bank. Composant principal de la page index.
 
 import React from "react";
-import iconChatLogo from "../../assets-images/img/icon-chat.png";
-import iconMoneyLogo from "../../assets-images/img/icon-money.png";
-import iconSecurityLogo from "../../assets-images/img/icon-security.png";
+import iconChatLogo from "../../assets-images/img/icon-chat.webp";
+import iconMoneyLogo from "../../assets-images/img/icon-money.webp";
+import iconSecurityLogo from "../../assets-images/img/icon-security.webp";
 
 const Features = () => {
   return (

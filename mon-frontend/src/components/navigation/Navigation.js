@@ -3,7 +3,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./navigation.css";
-import argentBankLogo from "../../assets-images/img/argentBankLogo.png";
+import argentBankLogo from "../../assets-images/img/argentBankLogo.webp";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, reset } from "../../feature/auth/authSlice";
 import { resetProfile } from "../../feature/profile/profile/profileSlice";
@@ -42,7 +42,7 @@ export default function Navigation() {
   useEffect(() => {
     // Si le slice newUserName indique un succès (isSuccess), l'état local userProfiles est mis à jour avec le nouveau nom d'utilisateur
     if (isSuccess && data) {
-      const newUserName = data.body.userName;
+      const newUserName = data.userName;
       setUserProfiles(newUserName);
     }
   }, [isSuccess, data]);
