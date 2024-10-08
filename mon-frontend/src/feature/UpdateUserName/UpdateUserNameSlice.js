@@ -1,18 +1,15 @@
-// Gestion de la fonctionnalité d'ACTUALISATION du nom d'utilisateur dans un store Redux, en envoyant une requête asynchrone à une API et en gérant les différents états de chargement, succès, et erreur.
+// Gestion de la fonctionnalité d'ACTUALISATION du nom d'utilisateur.
 
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { updateUser } from "./UpdateUserNameThunks";
 
 const initialState = {
-  // état de départ de la partie du store géré
   data: null,
   isError: false, // indique s'il y a une erreur lors de la maj
   isSuccess: false,
   isLoading: false,
   message: "", // msg d'erreur ou de succès, en fonction de la réponse
 };
-
-// MAJ du nom d'utilisateur avec CAT (qui, pour rappel, est une fonction fournie par RTk pour gérer les actions asynchrones, comme des appels API)
 
 // Slice pour gérer l'état de la maj (userNameSlice)
 export const userNameSlice = createSlice({
@@ -28,7 +25,6 @@ export const userNameSlice = createSlice({
     },
   },
 
-  // ExtraReducers : ce bloc gère les différentes étapes de la requête asynchrone (en attente, succès, erreur...)
   extraReducers: (builder) => {
     builder
       .addCase(updateUser.pending, (state) => {

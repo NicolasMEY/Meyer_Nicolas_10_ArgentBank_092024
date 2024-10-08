@@ -1,4 +1,8 @@
-// Le composant Profile est chargé de gérer l'affichage et la mise à jour des informations de profil de l'utilisateur.  Affiche les informations actuelles de l'utilisateur et permet de mettre à jour le nom d'utilisateur. Utilise Redux pour accéder à l'état global (informations de l'utilisateur, état de chargement, erreurs). Utilise l'état local pour gérer le nom d'utilisateur avant la soumission.
+// Le composant Profile a pour objectif principal de :
+// Afficher les informations actuelles de l'utilisateur.
+// Permettre la mise à jour du nom d'utilisateur.
+// Gérer l'état local pour le formulaire de mise à jour avant soumission.
+// Interagir avec le store Redux pour accéder et mettre à jour les informations utilisateur globales.
 
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,23 +12,23 @@ import "./profile.css";
 const Profile = ({ setIsEditing }) => {
   const dispatch = useDispatch();
 
-  // State Redux
-  const { userInfo } = useSelector((state) => state.profile); // On récupère les données utilisateur depuis le store Redux
-  const { data, isSuccess } = useSelector((state) => state.newUserName); // On récupère le statut et les données après mise à jour
+  // State global avec Redux
+  const { userInfo } = useSelector((state) => state.profile); // On récupère les données utilisateur depuis le slice profile du store Redux
+  const { data, isSuccess } = useSelector((state) => state.newUserName); // On récupère le statut et les données depuis le slice newUsername qui gère la mise à jour utilisateur
 
   // State local
-  const [userData, setUserData] = useState(userInfo?.userName || ""); // stocke le nom d'utilisateur saisi dans le formulaire (userData) et l'état d'affichage du profil (userProfile)
+  const [userData, setUserData] = useState(userInfo?.userName || ""); //  L'état est initialisé avec le nom d'utilisateur actuel provenant de Redux (userInfo.userName) ou une chaîne vide si userInfo n'est pas défini.
 
-  //  Capture des changements dans le formulaire : chaque fois que l'utilisateur modifie l'input userName, cette fonction met à jour l'état userData avec la nouvelle valeur saisie
+  //  Gestion des évènements du formulaire : chaque fois que l'utilisateur modifie l'input userName, cette fonction met à jour l'état userData avec la nouvelle valeur saisie
   const onChange = (e) => {
     setUserData(e.target.value);
   };
 
-  // Soumission du formulaire et maj du nom d'utilisateur
+  // Soumission du formulaire et maj du nom d'utilisateur (action updateUser avec userData)
   const handleSubmitUserName = (e) => {
     e.preventDefault();
     dispatch(updateUser({ userData }));
-    setIsEditing(false);
+    setIsEditing(false); // Désactive le mode édition aprés la soumission
   };
 
   // Annulation de l'édition
@@ -33,14 +37,13 @@ const Profile = ({ setIsEditing }) => {
     setIsEditing(false);
   };
 
-  // Maj des informations utilisateurs lors de la modification : Le hook useEffect est utilisé pour surveiller les changements dans les données utilisateur provenant du Redux store, et pour mettre à jour le userProfile et le userData en conséquence.
+  // Maj des informations utilisateurs lors de la modification : useEffect est utilisé pour surveiller les changements dans [isSucces, userInfo, data] provenant du Redux store, et pour mettre à jour le userProfile et le userData en conséquence.
   useEffect(() => {
     // Si un utilisateur est connecté, alors on actualise le state avec l'userName du profil
     if (userInfo && userInfo.body) {
       setUserData(userInfo.userName);
     }
-
-    // si la mise à jour du nom d'utilisateur réussit (isSuccess), on extrait le nouveau nom d'utilisateur et on met à jour les états locaux avec cette nouvelle valeur
+    // si la mise à jour du nom d'utilisateur réussit (isSuccess) et les nouvelles données disponibles (data.body), on extrait le nouveau nom d'utilisateur et on met à jour les états locaux avec cette nouvelle valeur
     if (isSuccess && data.body) {
       setUserData(data.body.userName);
     }
@@ -49,7 +52,6 @@ const Profile = ({ setIsEditing }) => {
   return (
     <form className="editForm-container" onSubmit={handleSubmitUserName}>
       <h2 className="editForm-title">Edit user info</h2>
-
       <div className="editInput-wrapper">
         <label htmlFor="userName">User name:</label>
         <input
@@ -59,7 +61,7 @@ const Profile = ({ setIsEditing }) => {
           value={userData}
           placeholder={userData} // Affiche le nom d'utilisateur actuel comme placeholder
           onChange={onChange}
-          required
+          required // champ obligatoire
         />
       </div>
       <div className="editInput-wrapper">

@@ -1,10 +1,9 @@
-// Le composant Navigation est principalement responsable de l'affichage du logo de l'application et des liens de navigation, comme le lien vers la page de connexion. Il ajuste les liens disponibles en fonction de l'état d'authentification de l'utilisateur.
-
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./navigation.css";
 import argentBankLogo from "../../assets-images/img/argentBankLogo.webp";
 import { useSelector, useDispatch } from "react-redux";
+// Actions redux
 import { logout, reset } from "../../feature/auth/authSlice";
 import { resetProfile } from "../../feature/profile/profile/profileSlice";
 import { resetUserName } from "../../feature/UpdateUserName/UpdateUserNameSlice";
@@ -35,8 +34,6 @@ export default function Navigation() {
       const userName = userInfo.userName;
       setUserProfiles(userName);
     }
-
-    console.log(userInfo);
   }, [userInfo]);
 
   useEffect(() => {
@@ -59,7 +56,7 @@ export default function Navigation() {
   return (
     <header className="App-header">
       <nav className="main-nav">
-        <Link to="./" className='class="main-nav-logo'>
+        <Link to="./" className="main-nav-logo">
           <img
             className="main-nav-logo-image"
             src={argentBankLogo}

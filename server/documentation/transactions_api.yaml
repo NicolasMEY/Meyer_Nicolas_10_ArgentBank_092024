@@ -1,7 +1,7 @@
 # Ce document Swagger fournit une description complète des endpoints pour gérer les transactions bancaires des utilisateurs. Il inclut :
-# La récupération des transactions par compte.
-# L'accès aux détails spécifiques d'une transaction.
-# La possibilité de modifier ou de supprimer les informations d'une transaction. Les réponses sont standardisées et les mécanismes de sécurité sont bien définis via des tokens JWT.
+# 1. La récupération des transactions par compte.
+# 2. L'accès aux détails spécifiques d'une transaction.
+# 3. La possibilité de modifier ou de supprimer les informations d'une transaction. Les réponses sont standardisées et les mécanismes de sécurité sont bien définis via des tokens JWT.
 
 # Explications des sections
 # host, basePath, schemes: Définissent la base URL pour toutes les requêtes API.
@@ -168,9 +168,9 @@ securityDefinitions:
     name: "Authorization"
     in: "header"
 
-# la section definitions joue un rôle crucial dans la spécification des données échangées entre le client et le serveur. Elle permet de structurer, documenter et valider les données, ce qui améliore la compréhension et la sécurité de l'API.
+# la section definitions joue un rôle crucial dans la spécification des données échangées entre le client et le serveur. Elles décrivent les structures de réponse que l'API peut renvoyer pour différents chemins (paths) ou opérations. Elles définissent les objets de données qui seront retournés dans les réponses en fonction des appels API. Ce qui permet de standardiser et de documenter les données échangées.
 definitions:
-  TransactionsResponse:
+  TransactionsResponse: 
     type: "object"
     properties:
       status:
@@ -236,7 +236,6 @@ definitions:
           note:
             type: "string"
             description: "user's notes for transaction"
-
 
   EditTransaction:
     type: "object"

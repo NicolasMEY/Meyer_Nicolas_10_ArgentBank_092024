@@ -304,3 +304,9 @@ body {
     width: 200px;
   }
 }
+
+.error-message {
+  color: red !important;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}

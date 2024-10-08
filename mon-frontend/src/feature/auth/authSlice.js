@@ -1,16 +1,18 @@
 // Ce fichier authSlice.js gère l'état d'authentification dans l'application. Il définit les actions et le reducer pour les processus de connexion (isLoading, isSucces, isError, message) et de déconnexion (logoutUser). Il permet de suivre l'état de connexion de l'utilisateur (authentifié ou non), gérer les erreurs, et stocker le token d'authentification.
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import authThunks from "./authThunks"; // Service contenant les fonctions login et logout pour gérer les requêtes API liées à l'authentification
+import authThunks from "./authThunks"; // Module contenant les fonctions login et logout pour gérer les requêtes API liées à l'authentification
 
 const initialState = {
   token: null,
   error: null,
   isSuccess: false,
   isLoading: false,
+  isError: false,
 };
 
 // Thunk pour le login
+
 export const login = createAsyncThunk(
   "auth/login",
   async ({ email, password }, thunkAPI) => {
@@ -26,9 +28,7 @@ export const login = createAsyncThunk(
           password,
         }),
       });
-
       const data = await response.json();
-
       if (data.status === 200) {
         return { token: data.body.token };
       } else {
@@ -45,11 +45,13 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   await authThunks.logout();
 });
 
+// Création du slice (authSlice)
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     reset: (state) => {
+      // réinitialise certaines propriétés de l'état
       state.isLoading = false;
       state.isError = false;
       state.isSuccess = false;
@@ -65,24 +67,23 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.token = action.payload.token;
+        state.token = action.payload.token; // Contient les données spécifiques à l'action (comme un token d'authentification ou un message d'erreur) et est utilisé pour mettre à jour l'état.
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
+      .addCase(logout.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(logout.fulfilled, (state) => {
         state.token = null;
         state.error = null;
         state.isLoading = false;
+        state.isSuccess = false;
+        state.isError = false;
       });
   },
 });
 export const { reset } = authSlice.actions;
 export default authSlice.reducer;
-
-// // createSlice est une fonction de Redux Toolkit qui simplifie la création de "slices" (tranches) d'état et les reducers associés. Une slice est une portion de l'état global du store et les actions qui peuvent modifier cet état.
-// infos :
-// state : Représente l'état actuel de la slice et est modifié par les reducers.
-// action : Un objet qui indique qu'une action a eu lieu et peut contenir des données supplémentaires (payload = charge utile).
-// action.payload : Contient les données spécifiques à l'action (comme un token d'authentification ou un message d'erreur) et est utilisé pour mettre à jour l'état.

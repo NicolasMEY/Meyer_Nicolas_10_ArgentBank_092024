@@ -1,15 +1,4 @@
-// GESTION DES APPELS API POUR LOGIN/LOGOUT : pour les actions asynchrones (API calls), fonction userProfile qui effectue une requête HTTP GET pour récupérer les informations de profil utilisateur à partir d'une API. Il gère l'authentification en utilisant un token stocké dans localStorage, vérifie si le token est présent, traite les réponses de l'API et gère les erreurs potentielles
-
-// import axios from "axios";
-
-// Récupérer le nom de l'utilistaeur
-// const userProfile = async ({ token }) => {};
-
-// const profileService = {
-//   userProfile,
-// };
-
-// export default profileService;
+// GESTION DES APPELS API POUR LOGIN/LOGOUT : pour les actions asynchrones (API calls), fonction userProfile qui effectue une requête HTTP GET pour récupérer les informations de profil utilisateur à partir d'une API. Il gère l'authentification en utilisant un token stocké dans localStorage, vérifie si le token est présent, traite les réponses de l'API et gère les erreurs potentielles.
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -18,12 +7,12 @@ export const userProfile = createAsyncThunk(
   "profile/userProfile",
   async (_, thunkAPI) => {
     const state = thunkAPI.getState();
-    const token = state.auth.token;
+    const token = state.auth.token; // vérification si token présent
     if (!token) {
       return thunkAPI.rejectWithValue("Token is missing");
     }
 
-    // Requête API
+    // Requête API >>> pour récupération des données
     try {
       const response = await fetch(
         "http://localhost:3001/api/v1/user/profile",

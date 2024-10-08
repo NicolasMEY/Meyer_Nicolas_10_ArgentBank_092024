@@ -1,4 +1,4 @@
-// Module qui gère la logique des appels API
+// Module qui gère la logique des appels API pour maj du nom utilisateur
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -6,7 +6,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 export const updateUser = createAsyncThunk(
   "update/updateUser",
   async ({ userData }, thunkAPI) => {
-    console.log("userData", userData); // Debugging
     const state = thunkAPI.getState();
     const token = state.auth.token;
 
@@ -35,7 +34,6 @@ export const updateUser = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log("Réponse de l'API:", data); // Debugging
       return data.body;
     } catch (error) {
       return thunkAPI.rejectWithValue("An error occurred. Please try again.");
