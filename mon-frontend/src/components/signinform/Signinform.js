@@ -40,7 +40,7 @@ export default function SignInForm() {
     const rememberEmail = localStorage.getItem("email");
     const rememberPassword = localStorage.getItem("password");
     if (rememberEmail && rememberPassword) {
-      // Si les données sont trouvées > maj
+      // Si les données sont trouvées > elles sont extraites et mises à jour dans l'état local via setFormData, avec le champ rememberMe défini à true
       setFormData((prevState) => ({
         ...prevState,
         email: JSON.parse(rememberEmail),

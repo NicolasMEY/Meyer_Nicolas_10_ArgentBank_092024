@@ -1,7 +1,7 @@
 # Ce document Swagger fournit une description complète des endpoints pour gérer les transactions bancaires des utilisateurs. Il inclut :
 # 1. La récupération des transactions par compte.
 # 2. L'accès aux détails spécifiques d'une transaction.
-# 3. La possibilité de modifier ou de supprimer les informations d'une transaction. Les réponses sont standardisées et les mécanismes de sécurité sont bien définis via des tokens JWT.
+# 3. La possibilité de modifier les informations d'une transaction. Les réponses sont standardisées et les mécanismes de sécurité sont bien définis via des tokens JWT.
 
 # Explications des sections
 # host, basePath, schemes: Définissent la base URL pour toutes les requêtes API.
@@ -53,6 +53,8 @@ paths:
           description: "Invalid Account"
         "401": 
           description: "Unauthorized, invalid token"
+        "403": 
+          description: "Unauthorized, user not allowed to access these transactions"
         "500": 
           description: "Internal Server Error"
 
@@ -86,6 +88,8 @@ paths:
           description: "Invalid account or transaction ID"
         "401":
           description: "Unauthorized, invalid token"
+        "403":
+          description: "Unauthorized, user not allowed to view this transaction"
         "500":
           description: "Internal Server Error"
 
@@ -127,38 +131,6 @@ paths:
           description: "Unauthorized, invalid token"
         "403":
           description: "Unauthorized, user not allowed to update this transaction"
-        "500":
-          description: "Internal Server Error"
-
-    delete:
-      security:
-        - Bearer: []
-      tags:
-        - "User Transactions"
-      summary: "Supprimer une note de transaction et les caégories"
-      description: "API pour supprimer une note et une caégorie d'une transaction"
-      parameters:
-        - in: header
-          name: Authorization
-          description: "Attach Bearer JWT Token"
-          required: true
-          type: string
-        - in: path
-          name: transaction_id
-          description: "Transaction ID"
-          required: true
-          type: integer
-      produces:
-        - application/json
-      responses:
-        "204":
-          description: "Transaction note and category deleted successfully"
-        "400":
-          description: "Invalid Fields"
-        "401":
-          description: "Unauthorized, invalid token"
-        "403":
-          description: "Unauthorized, user not allowed to delete this note and this category"
         "500":
           description: "Internal Server Error"
 

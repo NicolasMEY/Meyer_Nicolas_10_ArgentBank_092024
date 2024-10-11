@@ -16,26 +16,50 @@ const User = () => {
   // Sélection des états redux
   const { userInfo } = useSelector((state) => state.profile); // récupéré depuis le store, contient les infos de l'utilisateur connecté
   const { token } = useSelector((state) => state.auth); // récupéré depuis le store, contient le token de l'utilisateur connecté
+  const { data, isSuccess } = useSelector((state) => state.newUserName);
   // Etats locaux avec useState
   const [isEditing, setIsEditing] = useState(false); // Etat local qui détermine si l'utilisateur est en mode édition ou non
   const [fullName, setFullName] = useState(""); // Etat local qui stocke le nom du user
 
-  // Effet de bord
+  // Effet de bord pour récupérer les données de l'utilisateur
+  // useEffect(() => {
+  //   if (!token) {
+  //     navigate("/");
+  //   }
+  //   if (token) {
+  //     dispatch(userProfile(token));
+  //   }
+  // }, [token, dispatch, navigate]);
+
   useEffect(() => {
-    // Vérification de l'authentification sinon redirection vers la page d'accueil
-    if (!token) {
+    const storedToken = localStorage.getItem("token");
+    console.log("Stored Token:", storedToken);
+
+    if (!storedToken) {
       navigate("/");
+    } else {
+      // dispatch(login.fulfilled({ token: storedToken }));
+      dispatch(userProfile(storedToken));
     }
-    // Récupération des informations utilisateur avec dispatch
-    if (token && !userInfo) {
-      dispatch(userProfile(token)); // l'action userProfile est dispatchée pour récupérer les informations de l'utilisateur depuis l'API
-    }
-    // Formation du nom complet : Si les informations de l'utilisateur sont disponibles (userInfo), le nom complet est formé à partir du prénom (firstName) et du nom de famille (lastName) et est stocké dans l'état (fullName).
-    if (userInfo && !fullName) {
+  }, [dispatch, navigate]);
+
+  // Mise à jour du nom complet
+  useEffect(() => {
+    if (userInfo) {
       const { firstName, lastName } = userInfo;
-      setFullName(`${firstName} ${lastName}`);
+      if (firstName && lastName) {
+        setFullName(`${firstName} ${lastName}`);
+      }
     }
-  }, [userInfo, token, navigate]); // Dépendances : Cet effet doit se réexécuter chaque fois que userInfo, token, navigate, dispatch ou fullName changent, afin de s'assurer que l'état de l'application reste synchronisé avec les données utilisateur et le statut d'authentification
+  }, [userInfo]);
+
+  // Mise à jour du nom d'utilisateur en cas de changement
+  useEffect(() => {
+    if (isSuccess && data) {
+      const newUserName = data.userName;
+      setFullName(newUserName);
+    }
+  }, [isSuccess, data]);
 
   return (
     <div>
@@ -44,13 +68,13 @@ const User = () => {
           {/* Mode édition */}
           {/* Si isEditing est vrai, le composant Profile est affiché pour permettre à l'utilisateur de modifier son nom. Sinon, un message de bienvenue et un bouton "Edit Name" sont affichés. Lorsque ce bouton est cliqué, setIsEditing(true) est appelé pour activer le mode édition */}
           {isEditing ? (
-            <Profile setIsEditing={setIsEditing} />
+            <Profile setIsEditing={setIsEditing} setFullName={setFullName} />
           ) : (
             // setIsEditing = prop permettant de sortir du mode édition si false, et un fragment react est rendu ci dessous
             <>
               <h1>
                 Welcome back
-                <br /> {fullName} !
+                <br /> {fullName ? fullName : "User"} !
               </h1>
               <button
                 className="edit-button"
