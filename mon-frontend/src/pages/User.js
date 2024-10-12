@@ -5,18 +5,21 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Profile from "../components/profile/Profile";
 import Account from "../components/account/Account";
-import { userProfile } from "../feature/profile/profile/profileThunks"; // action asynchrone thunk) pour récupérer les datas du profil utilisateur via l'API
+import { userProfile } from "../feature/profile/profile/profileThunks";
+import { login } from "../feature/auth/authSlice";
 
 const User = () => {
   document.title = "Argent Bank - Profile";
 
   // Navigation et Dispatch
-  const navigate = useNavigate(); // Permet de naviguer entre les différentes pages de l'app, par exemple, vers la page d'accueil si l'utilisateur n'est pas authentifié
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
   // Sélection des états redux
   const { userInfo } = useSelector((state) => state.profile); // récupéré depuis le store, contient les infos de l'utilisateur connecté
-  const { token } = useSelector((state) => state.auth); // récupéré depuis le store, contient le token de l'utilisateur connecté
+  // const { token } = useSelector((state) => state.auth); // récupéré depuis le store, contient le token de l'utilisateur connecté
   const { data, isSuccess } = useSelector((state) => state.newUserName);
+
   // Etats locaux avec useState
   const [isEditing, setIsEditing] = useState(false); // Etat local qui détermine si l'utilisateur est en mode édition ou non
   const [fullName, setFullName] = useState(""); // Etat local qui stocke le nom du user
@@ -38,7 +41,7 @@ const User = () => {
     if (!storedToken) {
       navigate("/");
     } else {
-      // dispatch(login.fulfilled({ token: storedToken }));
+      dispatch(login.fulfilled({ token: storedToken }));
       dispatch(userProfile(storedToken));
     }
   }, [dispatch, navigate]);

@@ -72,7 +72,7 @@ export const userProfile = createAsyncThunk(
       if (response.ok) {
         // Utiliser response.ok pour une vérification plus concise
         const data = await response.json();
-        return data.body; // Assurez-vous que cela correspond à la structure de votre réponse
+        return data.body;
       } else {
         const errorData = await response.json();
         return thunkAPI.rejectWithValue(errorData.message);

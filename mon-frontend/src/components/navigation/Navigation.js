@@ -15,9 +15,7 @@ export default function Navigation() {
 
   //State Redux
   // const { token } = useSelector((state) => state.auth);
-  const [token, setToken] = useState(
-    () => localStorage.getItem("token") || null
-  );
+  const [token, setToken] = useState(localStorage.getItem("token") || null);
   const { userInfo } = useSelector((state) => state.profile);
   const { data, isSuccess } = useSelector((state) => state.newUserName);
 
@@ -25,66 +23,62 @@ export default function Navigation() {
   // const [token, setToken] = useState(localStorage.getItem("token")); // Récupérer le token depuis localStorage
 
   // Utilisez useEffect pour récupérer le profil utilisateur si le token est présent
+
+  if (localStorage.getItem("token") && token == null) {
+    setToken(localStorage.getItem("token"));
+  }
+
   useEffect(() => {
     if (token) {
-      dispatch(userProfile());
+      console.log("Token found, dispatching userProfile()");
+      dispatch(userProfile(token));
     } else {
+      console.log("No token found, resetting profile.");
       dispatch(resetProfile()); // Réinitialisez le profil si le token est absent
     }
   }, [token, dispatch]);
 
+  // // Mettre à jour le nom d'utilisateur local si les infos du profil changent
   // useEffect(() => {
-  //   // Vérifier la présence du token lors du chargement du composant
-  //   const savedToken = localStorage.getItem("token");
-  //   console.log("Saved Token:", savedToken);
-  //   setToken(savedToken);
-
-  //   // Si un token est trouvé dans localStorage, il envoie l'action userProfile() pour récupérer les données du profil utilisateur.
-  //   if (savedToken) {
-  //     dispatch(userProfile());
-  //   } else {
-  //     dispatch(resetProfile());
+  //   if (userInfo) {
+  //     setUserProfiles(userInfo.userName);
   //   }
-  // }, [dispatch]);
+  // }, [userInfo]);
 
+  // Mettre à jour le nom d'utilisateur local si les infos du profil changent
   useEffect(() => {
-    // met à jour l'état local userProfiles avec le userName contenu dans l'état userInfo de Redux, lorsque ces informations sont disponibles.
     if (userInfo) {
-      console.log("User Info:", userInfo);
+      console.log("User Info retrieved:", userInfo);
       const userName = userInfo.userName;
       setUserProfiles(userName);
+    } else {
+      setUserProfiles("");
     }
   }, [userInfo]);
 
+  // Mettre à jour le nom d'utilisateur si une modification du nom est réussie
   useEffect(() => {
-    // Si le slice newUserName indique un succès (isSuccess), l'état local userProfiles est mis à jour avec le nouveau nom d'utilisateur
     if (isSuccess && data) {
-      const newUserName = data.userName;
-      setUserProfiles(newUserName);
+      setUserProfiles(data.userName);
     }
   }, [isSuccess, data]);
 
   // useEffect(() => {
-  //   const handleStorageChange = () => {
-  //     const savedToken = localStorage.getItem("token");
-  //     setToken(savedToken);
+  //   // met à jour l'état local userProfiles avec le userName contenu dans l'état userInfo de Redux, lorsque ces informations sont disponibles.
+  //   if (userInfo) {
+  //     console.log("User Info:", userInfo);
+  //     const userName = userInfo.userName;
+  //     setUserProfiles(userName);
+  //   }
+  // }, [userInfo]);
 
-  //     if (savedToken) {
-  //       dispatch(userProfile());
-  //     } else {
-  //       // Si le token n'existe pas, tu peux aussi réinitialiser le profil ou d'autres états
-  //       dispatch(resetProfile());
-  //     }
-  //   };
-
-  //   // Écouteur pour les changements de stockage
-  //   window.addEventListener("storage", handleStorageChange);
-
-  //   // Nettoyage de l'écouteur d'événements
-  //   return () => {
-  //     window.removeEventListener("storage", handleStorageChange);
-  //   };
-  // }, [dispatch]);
+  // useEffect(() => {
+  //   // Si le slice newUserName indique un succès (isSuccess), l'état local userProfiles est mis à jour avec le nouveau nom d'utilisateur
+  //   if (isSuccess && data) {
+  //     const newUserName = data.userName;
+  //     setUserProfiles(newUserName);
+  //   }
+  // }, [isSuccess, data]);
 
   // La fonction onLogout gère la déconnexion de l'utilisateur. Elle envoie l'action logout() pour supprimer les données de l'utilisateur, ainsi que les actions reset() pour réinitialiser les états Redux du profil et du nom d'utilisateur. Elle redirige également l'utilisateur vers la page d'accueil via navigate("/").
   const onLogout = () => {
@@ -97,7 +91,7 @@ export default function Navigation() {
     dispatch(resetUserName());
     navigate("/");
   };
-  const isLoggedIn = token !== null && userProfiles !== "";
+  const isLoggedIn = !!token && !!userProfiles;
   console.log("Is Logged In:", isLoggedIn);
 
   return (

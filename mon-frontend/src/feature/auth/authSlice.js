@@ -57,7 +57,7 @@ export const login = createAsyncThunk(
 
 // Thunk pour le logout
 export const logout = createAsyncThunk("auth/logout", async () => {
-  await authThunks.logout();
+  authThunks.logout();
 });
 
 // Création du slice (authSlice)
